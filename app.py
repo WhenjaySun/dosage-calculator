@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
-from calculate_dosage import calculate_dosage
+import sys
+import math
 
 app = Flask(__name__)
 
@@ -15,6 +16,10 @@ def calculate():
     t = float(request.form['t'])
     dosage = calculate_dosage(c0, c, lam, t)
     return f"Dosage at time {t} is {dosage}"
+
+def calculate_dosage(c0, c, lam, t):
+    ln2 = math.log(2)
+    return c * lam / ln2 + (c0 - c * lam / ln2) * math.exp(-ln2 / lam * t)
 
 if __name__ == '__main__':
     app.run()
