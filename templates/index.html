@@ -2,19 +2,109 @@
 <html>
 <head>
     <title>Dosage Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 1em;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 2em auto;
+            padding: 1em;
+            border: 1px solid #ddd;
+        }
+
+        label,
+        input,
+        button {
+            display: block;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        button {
+            background: skyblue;
+            border: none;
+            padding: 0.5em 1em;
+            color: white;
+            cursor: pointer;
+        }
+
+        #results {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 1em;
+        }
+    </style>
 </head>
+
 <body>
-    <h1>Dosage Calculator</h1>
-    <form action="/calculate" method="post">
+    <header>
+        <h1>Dosage Calculator</h1>
+    </header>
+
+    <form id="dosage-form">
         <label for="c0">Initial dosage (c0):</label>
-        <input type="text" id="c0" name="c0"><br><br>
-        <label for="c">Evenly input dose every hour (c):</label>
-        <input type="text" id="c" name="c"><br><br>
-        <label for="lam">Half-life in hours (lambda):</label>
-        <input type="text" id="lam" name="lam"><br><br>
+        <input type="text" id="c0" name="c0">
+
+        <label for="c">Evenly input dose/hour (c):</label>
+        <input type="text" id="c" name="c">
+
+        <label for="lam">Half-life in hours (lam):</label>
+        <input type="text" id="lam" name="lam">
+
         <label for="t">Time in hours (t):</label>
-        <input type="text" id="t" name="t"><br><br>
-        <input type="submit" value="Calculate">
+        <input type="text" id="t" name="t">
+
+        <button type="submit">Calculate</button>
     </form>
+
+    <div id="results"></div>
+
+    <script>
+        const form = document.getElementById('dosage-form');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const c0 = parseFloat(document.getElementById('c0').value);
+            const c = parseFloat(document.getElementById('c').value);
+            const lam = parseFloat(document.getElementById('lam').value);
+            const t = parseFloat(document.getElementById('t').value);
+
+            const body = new URLSearchParams({
+                c0: c0.toString(),
+                c: c.toString(),
+                lam: lam.toString(),
+                t: t.toString()
+            });
+
+            try {
+                const response = await fetch('/calculate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: body
+                });
+
+                const data = await response.text();
+                document.getElementById('results').textContent = data;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('results').textContent = 'An error occurred while calculating the dosage.';
+            }
+        });
+    </script>
 </body>
+
 </html>
