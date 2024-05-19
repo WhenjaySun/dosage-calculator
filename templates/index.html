@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dosage Calculator</title>
+</head>
+<body>
+    <h1>Dosage Calculator</h1>
+    <form action="/calculate" method="post">
+        <label for="c0">Initial dosage (c0):</label>
+        <input type="text" id="c0" name="c0"><br><br>
+        <label for="c">Evenly input dose every hour (c):</label>
+        <input type="text" id="c" name="c"><br><br>
+        <label for="lam">Half-life in hours (lambda):</label>
+        <input type="text" id="lam" name="lam"><br><br>
+        <label for="t">Time in hours (t):</label>
+        <input type="text" id="t" name="t"><br><br>
+        <input type="submit" value="Calculate">
+    </form>
+</body>
+</html>
